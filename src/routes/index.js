@@ -1,9 +1,9 @@
 const express = require("express");
-const codeRouter = require("./code.router");
+const snippetRouter = require("./snippet");
 
 function routerApi(app) {
   const router = express.Router();
-  router.use("/code", codeRouter);
+  router.use("/snippet", snippetRouter);
   app.use("/api/v1", router);
 }
 
