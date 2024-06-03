@@ -10,16 +10,16 @@ const router = express.Router();
 
 router.post("/", (req, res) => {
   const { body } = req;
-  if (!body.snippet) {
-    return res.status(400).json({ message: "snippet is required" });
+  if (!body.snippet || !body.language) {
+    return res.status(400).json({ message: "snippet or language is missing" });
   }
 
-  const { snippet } = body;
+  const { snippet, language } = body;
   const id = uuid.v4();
 
   db.collection(config.SNIPPET_COLLECTION)
     .doc(id)
-    .set({ snippet })
+    .set({ snippet, language })
     .then(() =>
       res.status(200).json({ message: "Snippet created", snippetId: id })
     )
@@ -42,6 +42,7 @@ router.get("/:snippetId", async (req, res) => {
           content: {
             snippetId,
             snippet: doc.data().snippet,
+            language: doc.data().language,
           },
         });
       } else {
